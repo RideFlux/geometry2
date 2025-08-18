@@ -61,6 +61,54 @@ KDL::Frame gmTransformToKDL(const geometry_msgs::msg::TransformStamped& t)
 		      KDL::Vector(t.transform.translation.x, t.transform.translation.y, t.transform.translation.z));
   }
 
+/*************/
+/** Vector3 **/
+/*************/
+
+/** \brief Apply a geometry_msgs TransformStamped to an geometry_msgs Vector type.
+ * This function is a specialization of the doTransform template defined in tf2/convert.h.
+ * \param t_in The vector to transform, as a Vector3 message.
+ * \param t_out The transformed vector, as a Vector3 message.
+ * \param transform The timestamped transform to apply, as a TransformStamped message.
+ */
+template<>
+inline
+void doTransform(
+  const geometry_msgs::msg::Vector3 & t_in,
+  geometry_msgs::msg::Vector3 & t_out,
+  const geometry_msgs::msg::TransformStamped & transform)
+{
+  KDL::Vector v_out = gmTransformToKDL(transform).M * KDL::Vector(t_in.x, t_in.y, t_in.z);
+  t_out.x = v_out[0];
+  t_out.y = v_out[1];
+  t_out.z = v_out[2];
+}
+
+/** \brief Convert a tf2 Vector3 type to its equivalent geometry_msgs representation.
+ * This function is a specialization of the toMsg template defined in tf2/convert.h.
+ * \param in A tf2 Vector3 object.
+ * \return The Vector3 converted to a geometr!y_msgs message type.
+ */
+inline
+geometry_msgs::msg::Vector3 toMsg(const tf2::Vector3 & in)
+{
+  geometry_msgs::msg::Vector3 out;
+  out.x = in.getX();
+  out.y = in.getY();
+  out.z = in.getZ();
+  return out;
+}
+
+/** \brief Convert a Vector3 message to its equivalent tf2 representation.
+ * This function is a specialization of the fromMsg template defined in tf2/convert.h.
+ * \param in A Vector3 message type.
+ * \param out The Vector3 converted to a tf2 type.
+ */
+inline
+void fromMsg(const geometry_msgs::msg::Vector3 & in, tf2::Vector3 & out)
+{
+  out = tf2::Vector3(in.x, in.y, in.z);
+}
 
 /********************/
 /** Vector3Stamped **/
