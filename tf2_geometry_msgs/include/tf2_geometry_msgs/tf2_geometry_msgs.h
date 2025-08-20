@@ -173,6 +173,40 @@ void fromMsg(const geometry_msgs::msg::Vector3Stamped& msg, geometry_msgs::msg::
 }
 
 
+/***********/
+/** Point **/
+/***********/
+
+/** \brief Apply a geometry_msgs TransformStamped to an geometry_msgs Point type.
+ * This function is a specialization of the doTransform template defined in tf2/convert.h.
+ * \param t_in The point to transform, as a Point3 message.
+ * \param t_out The transformed point, as a Point3 message.
+ * \param transform The timestamped transform to apply, as a TransformStamped message.
+ */
+template<>
+inline
+void doTransform(
+  const geometry_msgs::msg::Point & t_in,
+  geometry_msgs::msg::Point & t_out,
+  const geometry_msgs::msg::TransformStamped & transform)
+{
+  KDL::Vector v_out = gmTransformToKDL(transform) * KDL::Vector(t_in.x, t_in.y, t_in.z);
+  t_out.x = v_out[0];
+  t_out.y = v_out[1];
+  t_out.z = v_out[2];
+}
+
+/** \brief Convert a Vector3 message to its equivalent tf2 representation.
+ * This function is a specialization of the fromMsg template defined in tf2/convert.h.
+ * \param in A Vector3 message type.
+ * \param out The Vector3 converted to a tf2 type.
+ */
+inline
+void fromMsg(const geometry_msgs::msg::Point & in, tf2::Vector3 & out)
+{
+  out = tf2::Vector3(in.x, in.y, in.z);
+}
+
 
 /******************/
 /** PointStamped **/
