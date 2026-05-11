@@ -15,12 +15,21 @@
 #ifndef TF2_IMPL_UTILS_H
 #define TF2_IMPL_UTILS_H
 
-#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <tf2/convert.h>
+#include <geometry_msgs/msg/quaternion.hpp>
+#include <geometry_msgs/msg/quaternion_stamped.hpp>
+
 #include <tf2/transform_datatypes.h>
 #include <tf2/LinearMath/Quaternion.h>
 
-namespace tf2 {
-namespace impl {
+namespace tf2
+{
+
+// Forward declare functions needed in this header
+void fromMsg(const geometry_msgs::msg::Quaternion& in, tf2::Quaternion& out);
+
+namespace impl
+{
 
 /** Function needed for the generalization of toQuaternion
  * \param q a tf2::Quaternion
@@ -74,7 +83,7 @@ template<typename T>
     return toQuaternion(q);
   }
 
-/** The code below is blantantly copied from urdfdom_headers
+/** The code below is blatantly copied from urdfdom_headers
  * only the normalization has been added.
  * It computes the Euler roll, pitch yaw from a tf2::Quaternion
  * It is equivalent to tf2::Matrix3x3(q).getEulerYPR(yaw, pitch, roll);
@@ -148,7 +157,7 @@ double getYaw(const tf2::Quaternion& q)
   return yaw;
 }
 
-}
-}
+}  // namespace impl
+}  // namespace tf2
 
 #endif //TF2_IMPL_UTILS_H
